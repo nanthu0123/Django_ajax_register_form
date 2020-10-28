@@ -45,7 +45,8 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        .my-login-page .my-login-validation>input[name='password2']{
+
+        .my-login-page .my-login-validation>input[name='password2'] {
             margin-bottom: 20px;
         }
 
@@ -71,12 +72,11 @@
                             <div class="card-body">
                                 <h4 class="card-title">Register</h4>
 
-                                <form method="POST" class="my-login-validation">
+                                <form id="register_form" action="{%url 'index'%}" class="my-login-validation">
                                     {%csrf_token%}
 
-
-
-                                    <input type="text" name="username" id="username" placeholder="username" autofocus><br>
+                                    <input type="text" name="username" id="username" placeholder="username"
+                                        autofocus><br>
 
 
                                     <input type="email" name="email" id="email" placeholder="email"><br>
@@ -91,9 +91,8 @@
 
 
                                     <div class="form-group m-0">
-                                        <button type="submit" class="btn btn-success">
-                                            Register
-                                        </button>
+                                        <input type="submit" class="btn btn-success" value="Register">
+
                                     </div>
                                 </form>
                             </div>
@@ -103,6 +102,53 @@
             </div>
         </div>
     </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <script>
+        // function check_username() {
+        //     var uname_length = $('#username').val().length;
+
+        //     if (uname_length < 5 || uname_length > 20) {
+        //         alert(`username length should be between 5-20, you entered username length is ${uname_length}`)
+        //     }
+        // }
+
+        // function check_password() {
+        //     var password_length = $('#password1').val().length;
+        //     if (password_length < 5 || password_length > 12) {
+        //         alert(`password length should be between 5-12, you entered password length is ${password_length}`)
+        //     }
+        // }
+
+        // $('#username').focusout(function () {
+        //     check_username()
+        // })
+
+        // $('#password1').focusout(function () {
+        //     check_password()
+        // })
+
+        $(document).on('submit', '#register_form', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: '/register/',
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                data: {
+                    name: $('#username').val(),
+                    email: $('#email').val(),
+                    password: $('#password1').val()
+                },
+                success: function () {
+                    alert('user registered!')
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
