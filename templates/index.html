@@ -156,7 +156,8 @@
             date: ${user.date}
             `);
 
-            if (user.username == '' || user.email == '' || user.password == '' || user.conf_password == '') {
+            if (user.username == '' || user.email == '' || user.password == '' || user.conf_password == '' ||
+                user.date == '') {
                 alert('all fields are mandatory')
                 user.validation = false
 
