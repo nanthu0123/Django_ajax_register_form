@@ -89,6 +89,8 @@
                                         placeholder="confirm password"><br>
 
 
+                                    <input type="text" name="datefilter" id="datefilter"
+                                        placeholder="dd/mm/yyyy - dd/mm/yyyy" />
 
                                     <div class="form-group m-0">
                                         <input type="submit" class="btn btn-success" value="Register">
@@ -102,51 +104,90 @@
             </div>
         </div>
     </section>
+    <!-- jquery main CDN -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"
         integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
+    <!--jauery date time picker CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <script>
-        // function check_username() {
-        //     var uname_length = $('#username').val().length;
+        // date picker range 
+        //source code from https://www.daterangepicker.com/
+        $(function () {
 
-        //     if (uname_length < 5 || uname_length > 20) {
-        //         alert(`username length should be between 5-20, you entered username length is ${uname_length}`)
-        //     }
-        // }
-
-        // function check_password() {
-        //     var password_length = $('#password1').val().length;
-        //     if (password_length < 5 || password_length > 12) {
-        //         alert(`password length should be between 5-12, you entered password length is ${password_length}`)
-        //     }
-        // }
-
-        // $('#username').focusout(function () {
-        //     check_username()
-        // })
-
-        // $('#password1').focusout(function () {
-        //     check_password()
-        // })
-
-        $(document).on('submit', '#register_form', function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                type: 'POST',
-                url: '/register/',
-                headers: {
-                    "X-CSRFToken": '{{csrf_token}}'
-                },
-                data: {
-                    name: $('#username').val(),
-                    email: $('#email').val(),
-                    password: $('#password1').val()
-                },
-                success: function () {
-                    alert('user registered!')
+            $('input[name="datefilter"]').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
                 }
             });
+            $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format(
+                    'MM/DD/YYYY'));
+            });
+            $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+            });
+        });
+
+        $(document).on('submit', '#register_form', function (e) {
+
+            // form validation code
+            e.preventDefault();
+            var user = {
+                username: $('#username').val(),
+                email: $('#email').val(),
+                password: $('#password1').val(),
+                conf_password: $('#password2').val(),
+                date: $('#datefilter').val(),
+                validation: false
+            }
+
+            // print user data in console
+            console.log(`
+            username:${user.username}
+            email: ${user.email}
+            password: ${user.password}
+            confirm password: ${user.conf_password}
+            date: ${user.date}
+            `);
+
+            if (user.username == '' || user.email == '' || user.password == '' || user.conf_password == '') {
+                alert('all fields are mandatory')
+                user.validation = false
+
+            } else {
+                if (user.password != user.conf_password) {
+                    alert('password does not match')
+                    user.validation = false
+                } else {
+                    user.validation = true
+                }
+            }
+
+            // ajax code 
+            if (user.validation) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/register/',
+                    headers: {
+                        "X-CSRFToken": '{{csrf_token}}'
+                    },
+                    data: {
+                        name: $('#username').val(),
+                        email: $('#email').val(),
+                        password: $('#password1').val(),
+                        date: $('#datefilter').val()
+                    },
+                    success: function () {
+                        alert('user registered!')
+                    }
+                });
+            }
         });
     </script>
 </body>
