@@ -8,10 +8,10 @@ def index(request):
 
 def create_user(request):
     if request.method == 'POST':
-        name = request.POST['name']
+        name = request.POST['username']
         email = request.POST['email']
-        password = request.POST['password']
-        date=request.POST['date']
+        password = request.POST['password1']
+        date=request.POST['datefilter']
 
         print(name, email, password)
 
