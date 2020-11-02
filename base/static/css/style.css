@@ -1,0 +1,49 @@
+html,
+body {
+    height: 100%;
+}
+
+body.my-login-page {
+    background-color: #f7f9fb;
+    font-size: 14px;
+}
+
+.my-login-page .card-wrapper {
+    width: 400px;
+}
+
+.my-login-page .card {
+    margin-top: 12%;
+    border-color: transparent;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .05);
+}
+
+.my-login-page .card.fat {
+    background-color: rgb(245, 245, 245);
+    padding: 10px;
+}
+
+.my-login-page .my-login-validation>input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.my-login-page .my-login-validation>input[name='password2'] {
+    margin-bottom: 20px;
+}
+
+.my-login-page .btn.btn-block {
+    padding: 12px 10px;
+}
+
+@media screen and (max-width: 425px) {
+    .my-login-page .card-wrapper {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
