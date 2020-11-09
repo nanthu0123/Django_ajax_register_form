@@ -79,11 +79,18 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoProject',
         'USER': 'root',
-        'PASSWORD': 'nanthu1234',
+        'PASSWORD': '*Nanthu23',
         'HOST': 'localhost',
-        'PORT': '3025',
+        'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
