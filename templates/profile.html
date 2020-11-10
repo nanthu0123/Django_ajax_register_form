@@ -27,30 +27,18 @@
 
                                 <form method="POST" class="my-login-validation">
                                     {%csrf_token%}
-                                    <input type="text" name="search" id="search">
+                                    <input type="text" name="name" id="name">
                                     <button class="btn btn-success" id="btn" type="submit">search</button>
                                 </form>
 
-                                {% if request.method == 'POST' %}
-                                {% if messages%}
+                                <div id="user-data">
 
-                                {% for message in messages%}
-                                {{message}}
-                                {% endfor %}
-
-                                {% else %}
-                                <p>Username: {{user.Name}}</p>
-                                <p>Password: {{user.Password}}</p>
-                                <p>Email: {{user.Email}}</p>
-                                <p>Date: {{user.Date}}</p>
-                                {% endif %}
-                                {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
     <!-- jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -58,15 +46,48 @@
     <!-- source: https://jqueryui.com/autocomplete/ -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <script>
+        $("#btn").on('click',function (e) {
+            e.preventDefault()
+            $.ajax({
+                type:'POST',
+                url: '/view/',
+                headers:{
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                data: $('#name').serialize(),
+                dataType: 'json',
+                success: function (json_data) {
+
+                    var data=JSON.parse(json_data)
+                   
+                    
+                    var name=`<p>Username: ${data[0].fields.Name}<p>`
+                    var password=`<p> Password: ${data[0].fields.Password}<p>`
+                    var email=`<p>Email: ${data[0].fields.Email}<p>`
+                    var date=`<p>Date: ${data[0].fields.Date}<p>`
+
+
+                    $('#user-data').append(name)
+                    $('#user-data').append(password)
+                    $('#user-data').append(email)
+                    $('#user-data').append(date)
+
+                }
+            });
+      });
+    </script>
+
     <!-- autocomplete source code -->
     <script>
         $(function () {
-            $("#search").autocomplete({
+            $("#name").autocomplete({
                 source: '{% url "view_user" %}',
                 minLength: 1
             });
         });
     </script>
+
 </body>
 
 </html>
