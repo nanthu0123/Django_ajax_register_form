@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from .models import UserRegister
+from django.core.serializers import serialize
 
 
 def index(request):
@@ -31,9 +32,10 @@ def view_user(request):
 
     if request.method == 'POST':
         try:
-            name = request.POST['search']
-            users = UserRegister.objects.get(Name=name)
-            return render(request, 'profile.html', {'user': users})
+            name = request.POST['name']
+            users = UserRegister.objects.filter(Name=name)
+            json_data=serialize('json',users)
+            return JsonResponse(json_data,safe=False)
 
         except ObjectDoesNotExist:
             messages.error(request, 'user data does not exist')
